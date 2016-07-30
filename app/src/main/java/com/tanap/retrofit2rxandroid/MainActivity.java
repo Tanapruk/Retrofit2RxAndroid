@@ -38,7 +38,7 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
     }
 
 
-    public void getZip() {
+    public void getStatusAndProfile() {
         tvStatusProfile.setText("Loading..");
         btnRequestStatusProfile.setEnabled(false);
         showLoading();
@@ -73,7 +73,7 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         if (view == btnRequestStatusProfile) {
-            getZip();
+            getStatusAndProfile();
         }
     }
 

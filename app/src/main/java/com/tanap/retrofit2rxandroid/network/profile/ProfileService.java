@@ -20,10 +20,6 @@ public class ProfileService extends GenericNetworkService {
         return service;
     }
 
-    public ProfileApi getJsonConnection() {
-        return (ProfileApi) getGenericJsonConnection();
-    }
-
     public ProfileApi getJsonRxConnection() {
         return (ProfileApi) getGenericRxConnection();
     }

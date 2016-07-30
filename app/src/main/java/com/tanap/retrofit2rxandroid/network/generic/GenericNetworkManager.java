@@ -16,6 +16,9 @@ import rx.schedulers.Schedulers;
 public abstract class GenericNetworkManager {
 
     protected <T> Single<T> setDefaultBehavior(Single<T> observable, final Class<T> tClass) {
+        //this append change command after observable methods
+        //this makes sure that the network service doesn't interrupt with the mainthread
+        //also each request will get a error handling
         return observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

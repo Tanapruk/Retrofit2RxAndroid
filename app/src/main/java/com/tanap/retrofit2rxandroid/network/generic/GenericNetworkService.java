@@ -19,6 +19,7 @@ public abstract class GenericNetworkService<T> {
     private String baseUrl;
     private boolean showLog = false;
 
+    //every network service class must inherit this class and set the class type, too
     protected abstract Class<T> getTClass();
 
     protected String getBaseUrl() {

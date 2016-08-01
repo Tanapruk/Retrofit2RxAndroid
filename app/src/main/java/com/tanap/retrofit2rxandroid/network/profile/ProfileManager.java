@@ -24,7 +24,7 @@ public class ProfileManager extends GenericNetworkManager {
 
 
     public Single<ProfileDao> getProfile() {
-        Single<ProfileDao> observable = ProfileService.getInstance().getJsonRxConnection().getProfile();
+        Single<ProfileDao> observable = ProfileClient.getInstance().getJsonRxConnection().getProfile();
         return setDefaultBehavior(observable, ProfileDao.class);
     }
 

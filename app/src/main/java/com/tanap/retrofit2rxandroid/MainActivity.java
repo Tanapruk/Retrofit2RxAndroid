@@ -67,7 +67,7 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
     }
 
     private void setStatusProfile(StatusProfileDao statusProfileDao) {
-        tvStatusProfile.setText("It is a " + statusProfileDao.getProfileDao().getName() + " " + statusProfileDao.getProfileDao().getSurname());
+        tvStatusProfile.setText(statusProfileDao.getStatusDao().getDeveloperMessage()+ " It is a " + statusProfileDao.getProfileDao().getName() + " " + statusProfileDao.getProfileDao().getSurname());
     }
 
     @Override

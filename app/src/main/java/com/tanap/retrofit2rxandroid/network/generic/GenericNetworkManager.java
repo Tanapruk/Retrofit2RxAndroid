@@ -1,5 +1,7 @@
 package com.tanap.retrofit2rxandroid.network.generic;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -34,8 +36,9 @@ public abstract class GenericNetworkManager {
         if (throwable instanceof HttpException) {
             //error 500
             HttpException httpException = (HttpException) throwable;
-            convertHttpResponse(httpException, tClass);
+            return convertHttpResponse(httpException, tClass);
         } else {
+            Log.d("TRUST", "checkException: ");
             throwable.printStackTrace();
         }
 

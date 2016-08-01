@@ -20,7 +20,7 @@ public class MyStatusManager extends GenericNetworkManager {
 
 
     public Single<StatusDao> getMyStatusRx() {
-        Single<StatusDao> observable = MyStatusService.getInstance().getJsonRxConnection().getStatus();
+        Single<StatusDao> observable = MyStatusClient.getInstance().getJsonRxConnection().getStatus();
         return setDefaultBehavior(observable, StatusDao.class);
     }
 

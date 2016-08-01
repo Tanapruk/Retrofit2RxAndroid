@@ -5,7 +5,12 @@ import android.util.Log;
 import com.tanap.retrofit2rxandroid.BuildConfig;
 import com.tanap.retrofit2rxandroid.URL;
 
+import java.io.IOException;
+
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -15,12 +20,14 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 /**
  * Created by trusttanapruk on 7/27/2016.
  */
-public abstract class GenericNetworkService<T> {
+public abstract class GenericNetworkClient<T> {
     private String baseUrl;
     private boolean showLog = false;
 
     //every network service class must inherit this class and set the class type, too
-    protected abstract Class<T> getTClass();
+    protected abstract Class<T> getApiClassType();
+
+    protected abstract Request getRequestInterceptor(Interceptor.Chain chain);
 
     protected String getBaseUrl() {
         if (baseUrl == null) {
@@ -29,7 +36,7 @@ public abstract class GenericNetworkService<T> {
         return baseUrl;
     }
 
-    protected GenericNetworkService setBaseUrl(String baseUrl) {
+    protected GenericNetworkClient setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
         return this;
     }
@@ -40,9 +47,20 @@ public abstract class GenericNetworkService<T> {
         return showLog;
     }
 
+    private Interceptor getInterceptor() {
+        return new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                return chain.proceed(getRequestInterceptor(chain));
+            }
+        };
+    }
+
 
     private OkHttpClient getClient() {
-        return new OkHttpClient.Builder().addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(isShowLog() ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE)).build();
+        return new OkHttpClient.Builder()
+                .addInterceptor(getInterceptor())
+                .addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(isShowLog() ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE)).build();
     }
 
     protected Retrofit.Builder getBaseBuilder() {
@@ -55,14 +73,14 @@ public abstract class GenericNetworkService<T> {
     protected T getGenericJsonConnection() {
         return getBaseBuilder()
                 .build()
-                .create(getTClass());
+                .create(getApiClassType());
     }
 
     protected T getGenericRxConnection() {
         return getBaseBuilder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()
-                .create(getTClass());
+                .create(getApiClassType());
     }
 
 }

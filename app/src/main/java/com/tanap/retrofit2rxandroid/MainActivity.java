@@ -7,7 +7,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.tanap.retrofit2rxandroid.model.StatusProfileDao;
-import com.tanap.retrofit2rxandroid.network.profile.ProfileManager;
+import com.tanap.retrofit2rxandroid.network.profile.ProfileController;
 
 import rx.Subscriber;
 
@@ -42,7 +42,7 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
         tvStatusProfile.setText("Loading..");
         btnRequestStatusProfile.setEnabled(false);
         showLoading();
-        subscription = ProfileManager.getInstance().getStatusAndProfile()
+        subscription = ProfileController.getInstance().getStatusAndProfile()
                 .subscribe(new Subscriber<StatusProfileDao>() {
                     @Override
                     public void onCompleted() {

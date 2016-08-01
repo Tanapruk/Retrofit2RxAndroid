@@ -15,7 +15,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by trusttanapruk on 7/28/2016.
  */
-public abstract class GenericNetworkManager {
+public abstract class GenericNetworkController {
 
     protected <T> Single<T> setDefaultBehavior(Single<T> observable, final Class<T> tClass) {
         //this append change command after observable methods

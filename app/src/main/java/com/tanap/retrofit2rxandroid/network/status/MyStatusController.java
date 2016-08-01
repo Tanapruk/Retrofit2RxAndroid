@@ -1,19 +1,19 @@
 package com.tanap.retrofit2rxandroid.network.status;
 
 import com.tanap.retrofit2rxandroid.model.StatusDao;
-import com.tanap.retrofit2rxandroid.network.generic.GenericNetworkManager;
+import com.tanap.retrofit2rxandroid.network.generic.GenericNetworkController;
 
 import rx.Single;
 
 /**
  * Created by trusttanapruk on 7/27/2016.
  */
-public class MyStatusManager extends GenericNetworkManager {
-    private static MyStatusManager manager;
+public class MyStatusController extends GenericNetworkController {
+    private static MyStatusController manager;
 
-    public static MyStatusManager getInstance() {
+    public static MyStatusController getInstance() {
         if (manager == null) {
-            manager = new MyStatusManager();
+            manager = new MyStatusController();
         }
         return manager;
     }

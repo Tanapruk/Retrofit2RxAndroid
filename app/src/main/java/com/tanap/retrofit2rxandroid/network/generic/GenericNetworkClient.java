@@ -27,7 +27,7 @@ public abstract class GenericNetworkClient<T> {
     //every network service class must inherit this class and set the class type, too
     protected abstract Class<T> getApiClassType();
 
-    protected abstract Request getRequestInterceptor(Interceptor.Chain chain);
+    protected abstract Request.Builder getRequestInterceptor(Request.Builder requestBuilder);
 
     protected String getBaseUrl() {
         if (baseUrl == null) {
@@ -47,14 +47,16 @@ public abstract class GenericNetworkClient<T> {
         return showLog;
     }
 
-    private Interceptor getInterceptor() {
+    private Interceptor getOnTopInterceptor() {
+        //per client interceptor
         return new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
-                if (getRequestInterceptor(chain) == null) {
+                Request.Builder newRequestBuilder = getRequestInterceptor(chain.request().newBuilder());
+                if (newRequestBuilder == null) {
                     return chain.proceed(chain.request());
                 }
-                return chain.proceed(getRequestInterceptor(chain));
+                return chain.proceed(newRequestBuilder.build());
             }
         };
     }
@@ -62,11 +64,12 @@ public abstract class GenericNetworkClient<T> {
 
     private OkHttpClient getClient() {
         return new OkHttpClient.Builder()
-                .addInterceptor(getInterceptor())
+                .addInterceptor(new GenericInterceptor())
+                .addInterceptor(getOnTopInterceptor())
                 .addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(isShowLog() ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE)).build();
     }
 
-    protected Retrofit.Builder getBaseBuilder() {
+    protected Retrofit.Builder getBaseRetrofitBuilder() {
         return new Retrofit.Builder().baseUrl(getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addConverterFactory(SimpleXmlConverterFactory.create())
@@ -74,13 +77,13 @@ public abstract class GenericNetworkClient<T> {
     }
 
     protected T getGenericJsonConnection() {
-        return getBaseBuilder()
+        return getBaseRetrofitBuilder()
                 .build()
                 .create(getApiClassType());
     }
 
     protected T getGenericRxConnection() {
-        return getBaseBuilder()
+        return getBaseRetrofitBuilder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()
                 .create(getApiClassType());

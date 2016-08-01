@@ -21,7 +21,7 @@ public class MyStatusController extends GenericNetworkController {
 
     public Single<StatusDao> getMyStatusRx() {
         Single<StatusDao> observable = MyStatusClient.getInstance().getJsonRxConnection().getStatus();
-        return setDefaultBehavior(observable, StatusDao.class);
+        return setDefaultHandling(observable, StatusDao.class);
     }
 
 }

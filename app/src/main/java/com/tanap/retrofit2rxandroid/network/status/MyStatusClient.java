@@ -2,7 +2,6 @@ package com.tanap.retrofit2rxandroid.network.status;
 
 import com.tanap.retrofit2rxandroid.network.generic.GenericNetworkClient;
 
-import okhttp3.Interceptor;
 import okhttp3.Request;
 
 /**
@@ -17,10 +16,10 @@ public class MyStatusClient extends GenericNetworkClient {
     }
 
     @Override
-    protected Request getRequestInterceptor(Interceptor.Chain chain) {
-        return chain.request().newBuilder()
-                .addHeader("HEADER", "HEADER1")
-                .build();
+    protected Request.Builder getRequestInterceptor(Request.Builder requestBuilder) {
+        return requestBuilder
+                .addHeader("HEADER", "MyStatusHeader");
+
     }
 
 

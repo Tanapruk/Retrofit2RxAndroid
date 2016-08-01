@@ -17,7 +17,7 @@ import rx.schedulers.Schedulers;
  */
 public abstract class GenericNetworkController {
 
-    protected <T> Single<T> setDefaultBehavior(Single<T> observable, final Class<T> tClass) {
+    protected <T> Single<T> setDefaultHandling(Single<T> observable, final Class<T> tClass) {
         //this append change command after observable methods
         //this makes sure that the network service doesn't interrupt with the mainthread
         //also each request will get a error handling
@@ -32,11 +32,11 @@ public abstract class GenericNetworkController {
                 });
     }
 
-    private <T> Single<T> checkException(Throwable throwable, Class<T> tClass) {
+    private <T> Single<T> checkException(Throwable throwable, Class<T> type) {
         if (throwable instanceof HttpException) {
             //error 500
             HttpException httpException = (HttpException) throwable;
-            return convertHttpResponse(httpException, tClass);
+            return convertHttpResponse(httpException, type);
         } else {
             Log.d("TRUST", "checkException: ");
             throwable.printStackTrace();
@@ -46,10 +46,10 @@ public abstract class GenericNetworkController {
         return null;
     }
 
-    private <T> Single<T> convertHttpResponse(HttpException httpException, Class<T> tClass) {
+    private <T> Single<T> convertHttpResponse(HttpException httpException, Class<T> type) {
         try {
             String json = httpException.response().errorBody().string();
-            return Single.just(new Gson().fromJson(json, tClass));
+            return Single.just(new Gson().fromJson(json, type));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -17,19 +17,25 @@ import rx.schedulers.Schedulers;
  */
 public abstract class GenericNetworkController {
 
-    protected <T> Single<T> setDefaultHandling(Single<T> observable, final Class<T> tClass) {
+
+    protected <T> Single.Transformer<T, T> applyErrorHandling(final Class<T> tClass) {
         //this append change command after observable methods
         //this makes sure that the network service doesn't interrupt with the mainthread
         //also each request will get a error handling
-        return observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .onErrorResumeNext(new Func1<Throwable, Single<? extends T>>() {
-                    @Override
-                    public Single<? extends T> call(Throwable throwable) {
-                        return checkException(throwable, tClass);
-                    }
-                });
+        //http://blog.danlew.net/2015/03/02/dont-break-the-chain/
+        return new Single.Transformer<T, T>() {
+            @Override
+            public Single<T> call(Single<T> observable) {
+                return observable.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .onErrorResumeNext(new Func1<Throwable, Single<? extends T>>() {
+                            @Override
+                            public Single<? extends T> call(Throwable throwable) {
+                                return checkException(throwable, tClass);
+                            }
+                        });
+            }
+        };
     }
 
     private <T> Single<T> checkException(Throwable throwable, Class<T> type) {

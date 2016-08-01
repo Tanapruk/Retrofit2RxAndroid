@@ -24,8 +24,7 @@ public class ProfileController extends GenericNetworkController {
 
 
     public Single<ProfileDao> getProfile() {
-        Single<ProfileDao> observable = ProfileApiService.getInstance().getRxApi().getProfile();
-        return setDefaultHandling(observable, ProfileDao.class);
+        return ProfileApiService.getInstance().getRxApi().getProfile().compose(applyErrorHandling(ProfileDao.class));
     }
 
 
@@ -39,7 +38,7 @@ public class ProfileController extends GenericNetworkController {
             }
         });
 
-        return setDefaultHandling(statusProfileDao, StatusProfileDao.class);
+        return statusProfileDao.compose(applyErrorHandling(StatusProfileDao.class));
     }
 
 }

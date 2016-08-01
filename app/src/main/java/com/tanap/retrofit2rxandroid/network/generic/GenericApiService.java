@@ -93,6 +93,16 @@ public abstract class GenericApiService<T> {
     }
 
 
+    public T getApi() {
+        if (api == null) {
+            api = getBaseRetrofitBuilder()
+                    .build()
+                    .create(getApiClassType());
+        }
+        return api;
+    }
+
+
     public T getRxApi() {
         if (api == null) {
             api = getBaseRetrofitBuilder()

@@ -10,8 +10,6 @@ import okhttp3.Request;
 public class ProfileApiService extends GenericApiService<ProfileApi> {
     private static ProfileApiService service;
 
-
-
     public static ProfileApiService getInstance() {
         if (service == null) {
             service = new ProfileApiService();

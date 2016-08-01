@@ -9,24 +9,23 @@ import okhttp3.Request;
  */
 public class MyStatusApiService extends GenericApiService<StatusApi> {
     private static MyStatusApiService service;
+    public static MyStatusApiService getInstance() {
+        if (service == null) {
+            service = new MyStatusApiService();
+        }
+        return service;
+    }
 
     @Override
     protected Class<StatusApi> getApiClassType() {
         return StatusApi.class;
     }
 
+
     @Override
     protected Request.Builder getRequestInterceptor(Request.Builder requestBuilder) {
         return requestBuilder
                 .addHeader("HEADER", "MyStatusHeader");
-    }
-
-
-    public static MyStatusApiService getInstance() {
-        if (service == null) {
-            service = new MyStatusApiService();
-        }
-        return service;
     }
 
 

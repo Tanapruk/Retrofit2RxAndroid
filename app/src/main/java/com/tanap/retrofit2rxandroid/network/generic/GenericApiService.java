@@ -24,6 +24,7 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 public abstract class GenericApiService<T> {
     private String baseUrl;
     private boolean showLog = false;
+    private T api;
 
     //every network service class must inherit this class and set the class type, too
     protected abstract Class<T> getApiClassType();
@@ -36,6 +37,8 @@ public abstract class GenericApiService<T> {
         }
         return baseUrl;
     }
+
+
 
     protected GenericApiService setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
@@ -85,17 +88,19 @@ public abstract class GenericApiService<T> {
                 .client(getClient());
     }
 
-    public T getConnection() {
-        return  getBaseRetrofitBuilder()
-                .build()
-                .create(getApiClassType());
+    public void setApi(T api) {
+        this.api = api;
     }
 
-    public T getRxConnection() {
-        return getBaseRetrofitBuilder()
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build()
-                .create(getApiClassType());
+
+    public T getRxApi() {
+        if (api == null) {
+            api = getBaseRetrofitBuilder()
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .build()
+                    .create(getApiClassType());
+        }
+        return api;
     }
 
 }

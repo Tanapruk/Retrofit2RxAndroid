@@ -10,6 +10,15 @@ import okhttp3.Request;
 public class ProfileApiService extends GenericApiService<ProfileApi> {
     private static ProfileApiService service;
 
+
+
+    public static ProfileApiService getInstance() {
+        if (service == null) {
+            service = new ProfileApiService();
+        }
+        return service;
+    }
+
     @Override
     protected Class<ProfileApi> getApiClassType() {
         return ProfileApi.class;
@@ -19,13 +28,6 @@ public class ProfileApiService extends GenericApiService<ProfileApi> {
     protected Request.Builder getRequestInterceptor(Request.Builder requestBuilder) {
         return requestBuilder
                 .addHeader("HEADER", "ProfileHeader");
-    }
-
-    public static ProfileApiService getInstance() {
-        if (service == null) {
-            service = new ProfileApiService();
-        }
-        return service;
     }
 
 }

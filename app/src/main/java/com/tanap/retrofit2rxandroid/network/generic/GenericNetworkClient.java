@@ -51,6 +51,9 @@ public abstract class GenericNetworkClient<T> {
         return new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
+                if (getRequestInterceptor(chain) == null) {
+                    return chain.proceed(chain.request());
+                }
                 return chain.proceed(getRequestInterceptor(chain));
             }
         };

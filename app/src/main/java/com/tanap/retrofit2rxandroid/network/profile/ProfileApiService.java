@@ -1,17 +1,17 @@
 package com.tanap.retrofit2rxandroid.network.profile;
 
-import com.tanap.retrofit2rxandroid.network.generic.GenericNetworkClient;
+import com.tanap.retrofit2rxandroid.network.generic.GenericApiService;
 
 import okhttp3.Request;
 
 /**
  * Created by trusttanapruk on 7/28/2016.
  */
-public class ProfileClient extends GenericNetworkClient {
-    private static ProfileClient service;
+public class ProfileApiService extends GenericApiService<ProfileApi> {
+    private static ProfileApiService service;
 
     @Override
-    protected Class getApiClassType() {
+    protected Class<ProfileApi> getApiClassType() {
         return ProfileApi.class;
     }
 
@@ -19,17 +19,13 @@ public class ProfileClient extends GenericNetworkClient {
     protected Request.Builder getRequestInterceptor(Request.Builder requestBuilder) {
         return requestBuilder
                 .addHeader("HEADER", "ProfileHeader");
-
     }
 
-    public static ProfileClient getInstance() {
+    public static ProfileApiService getInstance() {
         if (service == null) {
-            service = new ProfileClient();
+            service = new ProfileApiService();
         }
         return service;
     }
 
-    public ProfileApi getJsonRxConnection() {
-        return (ProfileApi) getGenericRxConnection();
-    }
 }

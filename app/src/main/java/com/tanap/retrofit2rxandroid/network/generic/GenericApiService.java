@@ -7,6 +7,7 @@ import com.tanap.retrofit2rxandroid.URL;
 
 import java.io.IOException;
 
+import okhttp3.CertificatePinner;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -20,7 +21,7 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 /**
  * Created by trusttanapruk on 7/27/2016.
  */
-public abstract class GenericNetworkClient<T> {
+public abstract class GenericApiService<T> {
     private String baseUrl;
     private boolean showLog = false;
 
@@ -36,7 +37,7 @@ public abstract class GenericNetworkClient<T> {
         return baseUrl;
     }
 
-    protected GenericNetworkClient setBaseUrl(String baseUrl) {
+    protected GenericApiService setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
         return this;
     }
@@ -61,12 +62,20 @@ public abstract class GenericNetworkClient<T> {
         };
     }
 
+    private CertificatePinner getCertificatePinner() {
+        return new CertificatePinner.Builder()
+                .add("sha256/", "sha1/")
+                .build();
+    }
 
     private OkHttpClient getClient() {
         return new OkHttpClient.Builder()
                 .addInterceptor(new GenericInterceptor())
                 .addInterceptor(getOnTopInterceptor())
-                .addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(isShowLog() ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE)).build();
+                .addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(isShowLog() ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE))
+                .certificatePinner(getCertificatePinner())
+                .build();
+
     }
 
     protected Retrofit.Builder getBaseRetrofitBuilder() {
@@ -76,13 +85,13 @@ public abstract class GenericNetworkClient<T> {
                 .client(getClient());
     }
 
-    protected T getGenericJsonConnection() {
-        return getBaseRetrofitBuilder()
+    public T getConnection() {
+        return  getBaseRetrofitBuilder()
                 .build()
                 .create(getApiClassType());
     }
 
-    protected T getGenericRxConnection() {
+    public T getRxConnection() {
         return getBaseRetrofitBuilder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()

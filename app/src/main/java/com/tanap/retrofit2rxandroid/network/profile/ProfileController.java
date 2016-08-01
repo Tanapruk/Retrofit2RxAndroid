@@ -24,7 +24,7 @@ public class ProfileController extends GenericNetworkController {
 
 
     public Single<ProfileDao> getProfile() {
-        Single<ProfileDao> observable = ProfileClient.getInstance().getJsonRxConnection().getProfile();
+        Single<ProfileDao> observable = ProfileApiService.getInstance().getRxConnection().getProfile();
         return setDefaultHandling(observable, ProfileDao.class);
     }
 

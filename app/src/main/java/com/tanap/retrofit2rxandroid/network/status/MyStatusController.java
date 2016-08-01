@@ -20,7 +20,7 @@ public class MyStatusController extends GenericNetworkController {
 
 
     public Single<StatusDao> getMyStatusRx() {
-        Single<StatusDao> observable = MyStatusClient.getInstance().getJsonRxConnection().getStatus();
+        Single<StatusDao> observable = MyStatusApiService.getInstance().getRxConnection().getStatus();
         return setDefaultHandling(observable, StatusDao.class);
     }
 

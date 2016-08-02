@@ -1,5 +1,8 @@
 package com.tanap.retrofit2rxandroid.network.profile;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
 import com.tanap.retrofit2rxandroid.model.ProfileDao;
 import com.tanap.retrofit2rxandroid.model.StatusDao;
 import com.tanap.retrofit2rxandroid.model.StatusProfileDao;
@@ -34,6 +37,7 @@ public class ProfileController extends GenericNetworkController {
         Single<StatusProfileDao> statusProfileDao = Single.zip(statusDao, profileDao, new Func2<StatusDao, ProfileDao, StatusProfileDao>() {
             @Override
             public StatusProfileDao call(StatusDao statusDao, ProfileDao profileDao) {
+                Log.d("TRUST", "call: profileDao " + new Gson().toJson(profileDao));
                 return new StatusProfileDao(statusDao, profileDao);
             }
         });

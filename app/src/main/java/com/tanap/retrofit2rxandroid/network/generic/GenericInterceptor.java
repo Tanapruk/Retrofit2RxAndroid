@@ -19,4 +19,6 @@ public class GenericInterceptor implements Interceptor {
         return builder.addHeader("HEADER", "GENERIC_HEADER")
                 .addHeader("HEADER2","GENERIC_HEADER2");
     }
+
+
 }

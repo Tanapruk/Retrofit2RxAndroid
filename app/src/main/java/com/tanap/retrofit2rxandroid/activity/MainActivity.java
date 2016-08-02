@@ -25,6 +25,7 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
     ProgressBar progressBar;
     TextView tvStatusProfile;
     Button btnRequestStatusProfile;
+    Button btnClear;
     RecyclerView recyclerView;
     List<StatusProfileDao> statusProfileDaoList;
     StatusProfileAdapter statusProfileAdapter;
@@ -37,6 +38,8 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         btnRequestStatusProfile = (Button) findViewById(R.id.btn_request_status_and_profile);
         btnRequestStatusProfile.setOnClickListener(this);
+        btnClear = (Button) findViewById(R.id.btn_clear);
+        btnClear.setOnClickListener(this);
         tvStatusProfile = (TextView) findViewById(R.id.tv_loading_status);
         recyclerView = (RecyclerView) findViewById(R.id.rv_container);
         statusProfileDaoList = new ArrayList<>();
@@ -63,6 +66,7 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
     public void getStatusAndProfile() {
         tvStatusProfile.setText("Loading..");
         btnRequestStatusProfile.setEnabled(false);
+        btnClear.setEnabled(false);
         showLoading();
         subscription = ProfileController.getInstance().getStatusAndProfile()
                 .subscribe(new Subscriber<StatusProfileDao>() {
@@ -70,6 +74,7 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
                     public void onCompleted() {
                         dismissLoading();
                         btnRequestStatusProfile.setEnabled(true);
+                        btnClear.setEnabled(true);
                     }
 
                     @Override
@@ -77,8 +82,9 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
                         Log.d("TRUST", "onError: ");
                         dismissLoading();
                         tvStatusProfile.setText("Error loading");
-                        toastError(e);
+                        btnClear.setEnabled(true);
                         btnRequestStatusProfile.setEnabled(true);
+                        toastError(e);
                         e.printStackTrace();
                     }
 
@@ -96,11 +102,19 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
         statusProfileAdapter.notifyDataSetChanged();
     }
 
+    private void clearList() {
+        statusProfileDaoList.clear();
+        statusProfileAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public void onClick(View view) {
         if (view == btnRequestStatusProfile) {
             getStatusAndProfile();
+        } else if (view == btnClear) {
+            clearList();
         }
+
     }
 
 

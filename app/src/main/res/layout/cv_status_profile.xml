@@ -5,7 +5,7 @@
     android:layout_marginBottom="8dp">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center_horizontal"
@@ -20,19 +20,19 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_status_id"
-                style="@style/TrustTextView"
+                style="@style/SlimTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="status_id" />
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_status_message"
-                style="@style/TrustTextView"
+                style="@style/SlimTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="status_message" />
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_status_developer"
-                style="@style/TrustTextView"
+                style="@style/SlimTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="status_developer" />
@@ -49,7 +49,7 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_profile_id"
-                style="@style/TrustTextView"
+                style="@style/SlimTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="profile_id" />
@@ -57,7 +57,7 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_profile_message"
-                style="@style/TrustTextView"
+                style="@style/SlimTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="profile_message" />
@@ -65,7 +65,7 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_profile_developer"
-                style="@style/TrustTextView"
+                style="@style/SlimTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="profile_message" />

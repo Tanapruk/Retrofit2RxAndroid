@@ -5,13 +5,40 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activity.MainActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        >
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="MyStatus"
+            android:textColor="@android:color/white"
+            style="@style/SlimTextView"
+            />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Profile"
+            android:textColor="@android:color/white"
+            style="@style/SlimTextView"
+            />
+
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp"
-        android:layout_marginBottom="70dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="90dp"
         />
 
     <LinearLayout
@@ -29,9 +56,18 @@
             />
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tv_loading_status"
-            android:layout_width="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_clear"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="Clear List" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_request_status_and_profile"

@@ -34,13 +34,15 @@ public class StatusProfileAdapter extends RecyclerView.Adapter<StatusProfileAdap
         StatusProfileDao statusProfileDao = statusProfileDaoList.get(position);
         StatusDao statusDao = statusProfileDao.getStatusDao();
         ProfileDao profileDao = statusProfileDao.getProfileDao();
-        holder.tvStatusId.setText(statusDao.getResultCode());
-        holder.tvStatusMessage.setText(statusDao.getResultDescription());
-        holder.tvStatusDev.setText(statusDao.getDeveloperMessage());
 
-        holder.tvProfileId.setText(profileDao.getResultCode());
-        holder.tvProfileMessage.setText(profileDao.getName() + " " + profileDao.getSurname());
-        holder.tvProfileDev.setText(profileDao.getDeveloperMessage());
+        holder.tvStatusId.setText(statusDao == null ? "" : statusDao.getResultCode());
+        holder.tvStatusMessage.setText(statusDao == null ? "" : statusDao.getResultDescription());
+        holder.tvStatusDev.setText(statusDao == null ? "" : statusDao.getDeveloperMessage());
+
+        holder.tvProfileId.setText(profileDao == null ? "" : profileDao.getResultCode());
+        holder.tvProfileMessage.setText(profileDao == null ? "" : profileDao.getName() + " " + profileDao.getSurname());
+        holder.tvProfileDev.setText(profileDao == null ? "" : profileDao.getDeveloperMessage());
+
     }
 
 

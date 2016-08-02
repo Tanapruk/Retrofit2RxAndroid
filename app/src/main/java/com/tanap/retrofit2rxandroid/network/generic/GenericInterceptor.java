@@ -16,8 +16,9 @@ public class GenericInterceptor implements Interceptor {
     }
 
     private Request.Builder getGenericRequest(Request.Builder builder) {
-        return builder.addHeader("HEADER", "GENERIC_HEADER")
-                .addHeader("HEADER2","GENERIC_HEADER2");
+        return builder
+                .addHeader("HEADER", "GENERIC_HEADER")
+                .addHeader("HEADER2", "GENERIC_HEADER2");
     }
 
 

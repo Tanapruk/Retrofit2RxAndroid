@@ -40,7 +40,7 @@ public abstract class GenericApiService<T> {
 
 
 
-    protected GenericApiService setBaseUrl(String baseUrl) {
+    public GenericApiService setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
         return this;
     }
@@ -65,6 +65,8 @@ public abstract class GenericApiService<T> {
         };
     }
 
+    // TODO: 8/4/2016 session timeout, session expire
+
     private CertificatePinner getCertificatePinner() {
         return new CertificatePinner.Builder()
                 .add("sha256/", "sha1/")
@@ -78,10 +80,10 @@ public abstract class GenericApiService<T> {
                 .addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(isShowLog() ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE))
                 .certificatePinner(getCertificatePinner())
                 .build();
-
     }
 
     protected Retrofit.Builder getBaseRetrofitBuilder() {
+        Log.d("TRUST", "getBaseRetrofitBuilder: "+ getClient().connectTimeoutMillis());
         return new Retrofit.Builder().baseUrl(getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addConverterFactory(SimpleXmlConverterFactory.create())

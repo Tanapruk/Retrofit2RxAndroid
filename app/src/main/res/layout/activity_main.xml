@@ -4,13 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.MainActivity">
+    tools:context=".activity.MainActivity"
+    android:background="@android:color/darker_gray"
+    >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         >
+
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_status_header"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -21,6 +25,7 @@
             />
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_profile_header"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -28,6 +33,7 @@
             android:text="Profile"
             android:textColor="@android:color/white"
             style="@style/SlimTextView"
+
             />
 
     </LinearLayout>
@@ -42,6 +48,7 @@
         />
 
     <LinearLayout
+        android:id="@+id/layout_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -53,6 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
+            android:visibility="invisible"
             />
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tv_loading_status"
@@ -67,7 +75,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:text="Clear List" />
+            android:text="Clear List"
+            />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_request_status_and_profile"

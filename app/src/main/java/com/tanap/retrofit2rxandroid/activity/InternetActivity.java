@@ -7,6 +7,8 @@ import android.widget.Toast;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 
 import rx.Subscription;
 
@@ -22,6 +24,12 @@ abstract class InternetActivity extends AppCompatActivity {
             Toast.makeText(InternetActivity.this, "Null Pointer", Toast.LENGTH_LONG).show();
         } else if (throwable instanceof JSONException) {
             Toast.makeText(InternetActivity.this, "JSONException", Toast.LENGTH_LONG).show();
+        } else if (throwable instanceof ConnectException) {
+            //no internet connection
+            Toast.makeText(InternetActivity.this, "ConnectException", Toast.LENGTH_SHORT).show();
+        } else if (throwable instanceof SocketTimeoutException) {
+            //network timeout exception
+            Toast.makeText(InternetActivity.this, "SocketTimeoutException", Toast.LENGTH_SHORT).show();
         } else if (throwable instanceof IOException) {
             Toast.makeText(InternetActivity.this, "IOException", Toast.LENGTH_LONG).show();
         } else {

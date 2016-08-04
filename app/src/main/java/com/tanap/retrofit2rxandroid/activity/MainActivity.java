@@ -14,6 +14,8 @@ import com.tanap.retrofit2rxandroid.StatusProfileAdapter;
 import com.tanap.retrofit2rxandroid.model.StatusProfileDao;
 import com.tanap.retrofit2rxandroid.network.profile.ProfileController;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,9 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
     RecyclerView recyclerView;
     List<StatusProfileDao> statusProfileDaoList;
     StatusProfileAdapter statusProfileAdapter;
+    LinearLayoutManager linearLayoutManager;
+    public static final String KEY_STATUS_PROFILE = "key_status_profile";
+    public static final String KEY_STATUS_PROFILE_MANAGER_STATE = "key_status_profile_state";
 
 
     @Override
@@ -42,26 +47,77 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
         btnClear.setOnClickListener(this);
         tvStatusProfile = (TextView) findViewById(R.id.tv_loading_status);
         recyclerView = (RecyclerView) findViewById(R.id.rv_container);
-        statusProfileDaoList = new ArrayList<>();
-
-        statusProfileAdapter = new StatusProfileAdapter(statusProfileDaoList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setAdapter(statusProfileAdapter);
+        linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
+        statusProfileDaoList = new ArrayList<>();
 
-        dismissLoading();
+        if (savedInstanceState != null) {
+            Log.d("TRUST", "onCreate: " + savedInstanceState.size());
+            Log.d("TRUST", "onCreate: " + savedInstanceState);
+            restoreInstance(savedInstanceState);
+        }
+        statusProfileAdapter = new StatusProfileAdapter(statusProfileDaoList);
+        recyclerView.setAdapter(statusProfileAdapter);
+
 
     }
 
+    protected void restoreInstance(Bundle savedInstanceState) {
+        statusProfileDaoList = Parcels.unwrap(savedInstanceState.getParcelable(KEY_STATUS_PROFILE));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.d("TRUST", "onSaveInstanceState: " + outState);
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(KEY_STATUS_PROFILE, Parcels.wrap(statusProfileDaoList));
+
+    }
+
+
     private void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
+        Log.d("TRUST", "showLoading: ");
     }
 
     private void dismissLoading() {
         progressBar.setVisibility(View.INVISIBLE);
+        Log.d("TRUST", "dismissLoading: ");
     }
 
+    private Subscriber<StatusProfileDao> statusProfileDaoSubscriber = new Subscriber<StatusProfileDao>() {
+        @Override
+        public void onCompleted() {
+            Log.d("TRUST", "onCompleted: ");
+            dismissLoading();
+            tvStatusProfile.setText("");
+            btnRequestStatusProfile.setEnabled(true);
+            btnClear.setEnabled(true);
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Log.d("TRUST", "onError: ");
+            dismissLoading();
+            tvStatusProfile.setText("Error loading");
+            btnClear.setEnabled(true);
+            toastError(e);
+            btnRequestStatusProfile.setEnabled(true);
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onNext(StatusProfileDao statusProfileDao) {
+            Log.d("TRUST", "onNext: ");
+            setStatusProfile(statusProfileDao);
+        }
+    };
 
     public void getStatusAndProfile() {
         tvStatusProfile.setText("Loading..");
@@ -69,42 +125,20 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
         btnClear.setEnabled(false);
         showLoading();
         subscription = ProfileController.getInstance().getStatusAndProfile()
-                .subscribe(new Subscriber<StatusProfileDao>() {
-                    @Override
-                    public void onCompleted() {
-                        dismissLoading();
-                        btnRequestStatusProfile.setEnabled(true);
-                        btnClear.setEnabled(true);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("TRUST", "onError: ");
-                        dismissLoading();
-                        tvStatusProfile.setText("Error loading");
-                        btnClear.setEnabled(true);
-                        btnRequestStatusProfile.setEnabled(true);
-                        toastError(e);
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(StatusProfileDao statusProfileDao) {
-                        setStatusProfile(statusProfileDao);
-                    }
-                });
-
+                .subscribe(statusProfileDaoSubscriber);
     }
 
     private void setStatusProfile(StatusProfileDao statusProfileDao) {
+        Log.d("TRUST", "setStatusProfile:");
         tvStatusProfile.setText("");
         statusProfileDaoList.add(statusProfileDao);
-        statusProfileAdapter.notifyDataSetChanged();
+        statusProfileAdapter.notifyItemInserted(statusProfileDaoList.size() - 1);
     }
 
     private void clearList() {
+        int removeSize = statusProfileDaoList.size();
         statusProfileDaoList.clear();
-        statusProfileAdapter.notifyDataSetChanged();
+        statusProfileAdapter.notifyItemRangeRemoved(0, removeSize);
     }
 
     @Override
@@ -114,7 +148,6 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
         } else if (view == btnClear) {
             clearList();
         }
-
     }
 
 

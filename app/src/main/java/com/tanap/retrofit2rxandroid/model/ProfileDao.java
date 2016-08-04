@@ -1,9 +1,15 @@
 package com.tanap.retrofit2rxandroid.model;
 
+import org.parceler.Parcel;
+
 /**
  * Created by trusttanapruk on 7/27/2016.
  */
+@Parcel
 public class ProfileDao extends StatusDao {
+    public ProfileDao() {
+    }
+
     private String name;
     private String surname;
 

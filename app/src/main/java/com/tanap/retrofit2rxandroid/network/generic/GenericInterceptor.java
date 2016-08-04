@@ -9,6 +9,7 @@ import okhttp3.Response;
 /**
  * Created by trusttanapruk on 8/1/2016.
  */
+
 public class GenericInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
@@ -20,6 +21,4 @@ public class GenericInterceptor implements Interceptor {
                 .addHeader("HEADER", "GENERIC_HEADER")
                 .addHeader("HEADER2", "GENERIC_HEADER2");
     }
-
-
 }

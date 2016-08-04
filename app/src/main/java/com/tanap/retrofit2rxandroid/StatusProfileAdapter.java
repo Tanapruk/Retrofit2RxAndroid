@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.tanap.retrofit2rxandroid.model.ProfileDao;
@@ -18,6 +20,7 @@ import java.util.List;
 public class StatusProfileAdapter extends RecyclerView.Adapter<StatusProfileAdapter.StatusProfileVH> {
 
     List<StatusProfileDao> statusProfileDaoList;
+    int lastPosition = -1;
 
     public StatusProfileAdapter(List<StatusProfileDao> statusProfileDaoList) {
         this.statusProfileDaoList = statusProfileDaoList;
@@ -43,6 +46,17 @@ public class StatusProfileAdapter extends RecyclerView.Adapter<StatusProfileAdap
         holder.tvProfileMessage.setText(profileDao == null ? "" : profileDao.getName() + " " + profileDao.getSurname());
         holder.tvProfileDev.setText(profileDao == null ? "" : profileDao.getDeveloperMessage());
 
+        setAnimation(holder.cvContainer, position);
+
+    }
+
+    private void setAnimation(View viewToAnimate, int position) {
+
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(viewToAnimate.getContext(), R.anim.push_up_in);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
 
@@ -61,8 +75,12 @@ public class StatusProfileAdapter extends RecyclerView.Adapter<StatusProfileAdap
         TextView tvProfileMessage;
         TextView tvProfileDev;
 
+        View cvContainer;
+
         public StatusProfileVH(View itemView) {
             super(itemView);
+
+            cvContainer = itemView.findViewById(R.id.layout_cv_container);
             tvStatusId = (TextView) itemView.findViewById(R.id.tv_status_id);
             tvStatusMessage = (TextView) itemView.findViewById(R.id.tv_status_message);
             tvStatusDev = (TextView) itemView.findViewById(R.id.tv_status_developer);

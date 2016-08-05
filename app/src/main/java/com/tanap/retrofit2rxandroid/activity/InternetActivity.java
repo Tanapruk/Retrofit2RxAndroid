@@ -4,20 +4,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.hwangjr.rxbus.RxBus;
+
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
-import rx.Subscription;
-
 /**
  * Created by trusttanapruk on 7/26/2016.
  */
 abstract class InternetActivity extends AppCompatActivity {
-    protected Subscription subscription;
-
     protected void toastError(Throwable throwable) {
         Log.e("TRUST", throwable.getClass().getSimpleName() + " with a message of " + throwable.getMessage());
         if (throwable instanceof NullPointerException) {
@@ -40,9 +38,11 @@ abstract class InternetActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (subscription != null) {
-            subscription.unsubscribe();
-            Log.d("TRUST", "onStop:Unsubscribed" + subscription.isUnsubscribed());
-        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RxBus.get().unregister(this);
     }
 }

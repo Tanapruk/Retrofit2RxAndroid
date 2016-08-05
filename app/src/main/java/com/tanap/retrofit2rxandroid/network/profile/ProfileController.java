@@ -1,12 +1,10 @@
 package com.tanap.retrofit2rxandroid.network.profile;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
 import com.tanap.retrofit2rxandroid.model.ProfileDao;
 import com.tanap.retrofit2rxandroid.model.StatusDao;
 import com.tanap.retrofit2rxandroid.model.StatusProfileDao;
 import com.tanap.retrofit2rxandroid.network.generic.GenericNetworkController;
+import com.tanap.retrofit2rxandroid.network.generic.SingleSubscriberImpl;
 import com.tanap.retrofit2rxandroid.network.status.MyStatusController;
 
 import rx.Single;
@@ -25,24 +23,20 @@ public class ProfileController extends GenericNetworkController {
         return manager;
     }
 
+    public void getStatusAndProfile() {
 
-    public Single<ProfileDao> getProfile() {
-        return ProfileApiService.getInstance().getRxApi().getProfile().compose(applyErrorHandling(ProfileDao.class));
-    }
-
-
-    public Single<StatusProfileDao> getStatusAndProfile() {
         Single<StatusDao> statusDao = MyStatusController.getInstance().getMyStatusRx();
-        Single<ProfileDao> profileDao = getProfile();
+        Single<ProfileDao> profileDao = ProfileApiService.getInstance().getRxApi().getProfile().compose(applySchedulerAndErrorHandling(ProfileDao.class));
+
         Single<StatusProfileDao> statusProfileDao = Single.zip(statusDao, profileDao, new Func2<StatusDao, ProfileDao, StatusProfileDao>() {
             @Override
             public StatusProfileDao call(StatusDao statusDao, ProfileDao profileDao) {
-                Log.d("TRUST", "call: profileDao " + new Gson().toJson(profileDao));
                 return new StatusProfileDao(statusDao, profileDao);
             }
         });
-
-        return statusProfileDao.compose(applyErrorHandling(StatusProfileDao.class));
+        statusProfileDao.compose(applySchedulerAndErrorHandling(StatusProfileDao.class)).subscribe(
+                new SingleSubscriberImpl<StatusProfileDao>(StatusProfileDao.class, StatusDao.class, ProfileDao.class));
     }
+
 
 }

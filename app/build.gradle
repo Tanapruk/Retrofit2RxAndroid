@@ -42,5 +42,7 @@ dependencies {
     compile 'com.android.support:cardview-v7:24.1.1'
     compile 'com.android.support:recyclerview-v7:24.1.1'
 
-
+    compile ('com.hwangjr.rxbus:rxbus:1.0.4') {
+        exclude group: 'com.jakewharton.timber', module: 'timber'
+    }
 }

@@ -20,7 +20,7 @@ public class MyStatusController extends GenericNetworkController {
 
 
     public Single<StatusDao> getMyStatusRx() {
-        return MyStatusApiService.getInstance().getRxApi().getStatus().compose(applyErrorHandling(StatusDao.class));
+        return MyStatusApiService.getInstance().getRxApi().getStatus().compose(applySchedulerAndErrorHandling(StatusDao.class));
     }
 
 }

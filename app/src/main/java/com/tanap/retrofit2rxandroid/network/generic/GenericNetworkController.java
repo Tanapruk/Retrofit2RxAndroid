@@ -20,11 +20,12 @@ import rx.schedulers.Schedulers;
 public abstract class GenericNetworkController {
 
 
-    protected <T> Single.Transformer<T, T> applyErrorHandling(final Class<T> typeOfClass) {
+    protected <T> Single.Transformer<T, T> applySchedulerAndErrorHandling(final Class<T> typeOfClass) {
         //this append change command after observable methods
         //this makes sure that the network service doesn't interrupt with the mainthread
         //also each request will get a error handling
         //http://blog.danlew.net/2015/03/02/dont-break-the-chain/
+        SubscribingState.getInstance().start(typeOfClass);
         return new Single.Transformer<T, T>() {
             @Override
             public Single<T> call(final Single<T> single) {

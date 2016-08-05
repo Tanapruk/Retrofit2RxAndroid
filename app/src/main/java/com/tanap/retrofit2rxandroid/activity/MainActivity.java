@@ -9,17 +9,18 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.hwangjr.rxbus.RxBus;
+import com.hwangjr.rxbus.annotation.Subscribe;
 import com.tanap.retrofit2rxandroid.R;
 import com.tanap.retrofit2rxandroid.StatusProfileAdapter;
 import com.tanap.retrofit2rxandroid.model.StatusProfileDao;
+import com.tanap.retrofit2rxandroid.network.generic.SubscribingState;
 import com.tanap.retrofit2rxandroid.network.profile.ProfileController;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import rx.Subscriber;
 
 
 public class MainActivity extends InternetActivity implements View.OnClickListener {
@@ -33,7 +34,6 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
     StatusProfileAdapter statusProfileAdapter;
     LinearLayoutManager linearLayoutManager;
     public static final String KEY_STATUS_PROFILE = "key_status_profile";
-    public static final String KEY_STATUS_PROFILE_MANAGER_STATE = "key_status_profile_state";
 
 
     @Override
@@ -53,18 +53,26 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
         statusProfileDaoList = new ArrayList<>();
 
         if (savedInstanceState != null) {
-            Log.d("TRUST", "onCreate: " + savedInstanceState.size());
-            Log.d("TRUST", "onCreate: " + savedInstanceState);
             restoreInstance(savedInstanceState);
         }
         statusProfileAdapter = new StatusProfileAdapter(statusProfileDaoList);
         recyclerView.setAdapter(statusProfileAdapter);
 
-
+        RxBus.get().register(this);
     }
 
     protected void restoreInstance(Bundle savedInstanceState) {
         statusProfileDaoList = Parcels.unwrap(savedInstanceState.getParcelable(KEY_STATUS_PROFILE));
+        Log.d("TRUST", "restoreInstance" + SubscribingState.getInstance().getServiceList());
+        setIsLoading(SubscribingState.getInstance().isAnyInProgress());
+    }
+
+    protected void setIsLoading(boolean isLoading) {
+        if (isLoading) {
+            showLoading();
+        } else {
+            dismissLoading();
+        }
     }
 
     @Override
@@ -74,58 +82,31 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Log.d("TRUST", "onSaveInstanceState: " + outState);
         super.onSaveInstanceState(outState);
         outState.putParcelable(KEY_STATUS_PROFILE, Parcels.wrap(statusProfileDaoList));
-
     }
 
 
     private void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
+        tvStatusProfile.setText("Loading..");
+        btnRequestStatusProfile.setEnabled(false);
+        btnClear.setEnabled(false);
         Log.d("TRUST", "showLoading: ");
     }
 
     private void dismissLoading() {
         progressBar.setVisibility(View.INVISIBLE);
+        tvStatusProfile.setText("");
+        btnRequestStatusProfile.setEnabled(true);
+        btnClear.setEnabled(true);
         Log.d("TRUST", "dismissLoading: ");
     }
 
-    private Subscriber<StatusProfileDao> statusProfileDaoSubscriber = new Subscriber<StatusProfileDao>() {
-        @Override
-        public void onCompleted() {
-            Log.d("TRUST", "onCompleted: ");
-            dismissLoading();
-            tvStatusProfile.setText("");
-            btnRequestStatusProfile.setEnabled(true);
-            btnClear.setEnabled(true);
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            Log.d("TRUST", "onError: ");
-            dismissLoading();
-            tvStatusProfile.setText("Error loading");
-            btnClear.setEnabled(true);
-            toastError(e);
-            btnRequestStatusProfile.setEnabled(true);
-            e.printStackTrace();
-        }
-
-        @Override
-        public void onNext(StatusProfileDao statusProfileDao) {
-            Log.d("TRUST", "onNext: ");
-            setStatusProfile(statusProfileDao);
-        }
-    };
 
     public void getStatusAndProfile() {
-        tvStatusProfile.setText("Loading..");
-        btnRequestStatusProfile.setEnabled(false);
-        btnClear.setEnabled(false);
         showLoading();
-        subscription = ProfileController.getInstance().getStatusAndProfile()
-                .subscribe(statusProfileDaoSubscriber);
+        ProfileController.getInstance().getStatusAndProfile();
     }
 
     private void setStatusProfile(StatusProfileDao statusProfileDao) {
@@ -150,5 +131,15 @@ public class MainActivity extends InternetActivity implements View.OnClickListen
         }
     }
 
+    @Subscribe
+    public void onStatusAndProfileFinished(StatusProfileDao statusProfileDao) {
+        dismissLoading();
+        setStatusProfile(statusProfileDao);
+    }
 
+    @Subscribe
+    public void onError(Throwable throwable) {
+        dismissLoading();
+        toastError(throwable);
+    }
 }

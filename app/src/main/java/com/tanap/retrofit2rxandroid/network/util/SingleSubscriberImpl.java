@@ -1,4 +1,4 @@
-package com.tanap.retrofit2rxandroid.network.generic;
+package com.tanap.retrofit2rxandroid.network.util;
 
 import com.hwangjr.rxbus.RxBus;
 

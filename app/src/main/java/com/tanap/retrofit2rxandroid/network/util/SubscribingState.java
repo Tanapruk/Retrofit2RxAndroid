@@ -1,4 +1,4 @@
-package com.tanap.retrofit2rxandroid.network.generic;
+package com.tanap.retrofit2rxandroid.network.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +37,8 @@ public class SubscribingState {
     public boolean isInProgress(Class<?> className) {
         return serviceList.contains(className.getSimpleName());
     }
+
+
 
     public void start(Class<?>... classOfDaoList) {
         for (Class<?> aClass : classOfDaoList) {

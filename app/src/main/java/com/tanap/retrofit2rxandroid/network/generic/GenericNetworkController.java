@@ -1,6 +1,7 @@
 package com.tanap.retrofit2rxandroid.network.generic;
 
 import com.google.gson.Gson;
+import com.tanap.retrofit2rxandroid.network.util.SubscribingState;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -14,7 +14,7 @@ import com.hwangjr.rxbus.annotation.Subscribe;
 import com.tanap.retrofit2rxandroid.R;
 import com.tanap.retrofit2rxandroid.StatusProfileAdapter;
 import com.tanap.retrofit2rxandroid.model.StatusProfileDao;
-import com.tanap.retrofit2rxandroid.network.generic.SubscribingState;
+import com.tanap.retrofit2rxandroid.network.util.SubscribingState;
 import com.tanap.retrofit2rxandroid.network.profile.ProfileController;
 
 import org.parceler.Parcels;

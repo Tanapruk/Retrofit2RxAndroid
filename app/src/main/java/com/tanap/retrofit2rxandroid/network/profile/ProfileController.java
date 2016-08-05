@@ -4,7 +4,7 @@ import com.tanap.retrofit2rxandroid.model.ProfileDao;
 import com.tanap.retrofit2rxandroid.model.StatusDao;
 import com.tanap.retrofit2rxandroid.model.StatusProfileDao;
 import com.tanap.retrofit2rxandroid.network.generic.GenericNetworkController;
-import com.tanap.retrofit2rxandroid.network.generic.SingleSubscriberImpl;
+import com.tanap.retrofit2rxandroid.network.util.SingleSubscriberImpl;
 import com.tanap.retrofit2rxandroid.network.status.MyStatusController;
 
 import rx.Single;

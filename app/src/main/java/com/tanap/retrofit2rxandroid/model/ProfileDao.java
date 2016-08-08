@@ -6,7 +6,7 @@ import org.parceler.Parcel;
  * Created by trusttanapruk on 7/27/2016.
  */
 @Parcel
-public class ProfileDao extends StatusDao {
+public class ProfileDao extends GenericDao {
     public ProfileDao() {
     }
 

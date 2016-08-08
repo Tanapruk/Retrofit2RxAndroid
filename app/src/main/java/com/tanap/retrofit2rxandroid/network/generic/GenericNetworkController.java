@@ -57,7 +57,7 @@ public abstract class GenericNetworkController {
         }
 
         if (httpException.response().code() == 404) {
-            // TODO: 8/2/2016 response().errorBody() cached the previous request
+            // TODO: 8/2/2016 response().errorBody() cached the previous repeated request
             //if we don't do like this then httpException
             // may get response from its cache and successfully convert to Json
             // cannot send out other object, too.

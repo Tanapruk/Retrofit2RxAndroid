@@ -1,7 +1,5 @@
 package com.tanap.retrofit2rxandroid.model;
 
-import com.google.gson.annotations.SerializedName;
-
 import org.parceler.Parcel;
 
 /**
@@ -9,42 +7,8 @@ import org.parceler.Parcel;
  */
 
 @Parcel
-public class StatusDao {
-    String resultCode;
-    @SerializedName("resultDesc")
-    String resultDescription;
-    String developerMessage;
+public class StatusDao extends GenericDao {
 
     public StatusDao() {
-    }
-    public StatusDao createErrorObject() {
-        resultCode = "500";
-        resultDescription = "Network Erro";
-        developerMessage = "5555";
-        return this;
-    }
-
-    public String getResultCode() {
-        return resultCode;
-    }
-
-    public void setResultCode(String resultCode) {
-        this.resultCode = resultCode;
-    }
-
-    public String getResultDescription() {
-        return resultDescription;
-    }
-
-    public void setResultDescription(String resultDescription) {
-        this.resultDescription = resultDescription;
-    }
-
-    public String getDeveloperMessage() {
-        return developerMessage;
-    }
-
-    public void setDeveloperMessage(String developerMessage) {
-        this.developerMessage = developerMessage;
     }
 }

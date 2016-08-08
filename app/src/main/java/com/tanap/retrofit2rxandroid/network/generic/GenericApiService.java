@@ -1,9 +1,6 @@
 package com.tanap.retrofit2rxandroid.network.generic;
 
-import android.util.Log;
-
 import com.tanap.retrofit2rxandroid.BuildConfig;
-import com.tanap.retrofit2rxandroid.URL;
 
 import java.io.IOException;
 
@@ -22,7 +19,7 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
  * Created by trusttanapruk on 7/27/2016.
  */
 public abstract class GenericApiService<T> {
-    private String baseUrl;
+    protected String baseUrl;
     private boolean showLog = false;
     private T api;
 
@@ -32,22 +29,15 @@ public abstract class GenericApiService<T> {
     protected abstract Request.Builder getRequestInterceptor(Request.Builder requestBuilder);
 
     protected String getBaseUrl() {
-        if (baseUrl == null) {
-            baseUrl = URL.URL_LOCAL_TRUST;
-        }
         return baseUrl;
     }
 
-
-
-    public GenericApiService setBaseUrl(String baseUrl) {
+    public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
-        return this;
     }
 
     private boolean isShowLog() {
         showLog = BuildConfig.DEBUG;
-        Log.d("TRUST", "isShowLog: " + showLog);
         return showLog;
     }
 
@@ -65,8 +55,6 @@ public abstract class GenericApiService<T> {
         };
     }
 
-    // TODO: 8/4/2016 session timeout, session expire
-
     private CertificatePinner getCertificatePinner() {
         return new CertificatePinner.Builder()
                 .add("sha256/", "sha1/")
@@ -83,8 +71,8 @@ public abstract class GenericApiService<T> {
     }
 
     protected Retrofit.Builder getBaseRetrofitBuilder() {
-        Log.d("TRUST", "getBaseRetrofitBuilder: "+ getClient().connectTimeoutMillis());
-        return new Retrofit.Builder().baseUrl(getBaseUrl())
+        return new Retrofit.Builder()
+                .baseUrl(getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addConverterFactory(SimpleXmlConverterFactory.create())
                 .client(getClient());
@@ -92,16 +80,6 @@ public abstract class GenericApiService<T> {
 
     public void setApi(T api) {
         this.api = api;
-    }
-
-
-    public T getApi() {
-        if (api == null) {
-            api = getBaseRetrofitBuilder()
-                    .build()
-                    .create(getApiClassType());
-        }
-        return api;
     }
 
 

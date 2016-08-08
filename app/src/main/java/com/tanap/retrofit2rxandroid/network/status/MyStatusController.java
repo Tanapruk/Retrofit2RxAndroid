@@ -1,5 +1,6 @@
 package com.tanap.retrofit2rxandroid.network.status;
 
+import com.tanap.retrofit2rxandroid.URL;
 import com.tanap.retrofit2rxandroid.model.StatusDao;
 import com.tanap.retrofit2rxandroid.network.generic.GenericNetworkController;
 
@@ -20,7 +21,7 @@ public class MyStatusController extends GenericNetworkController {
 
 
     public Single<StatusDao> getMyStatusRx() {
-        return MyStatusApiService.getInstance().getRxApi().getStatus().compose(applySchedulerAndErrorHandling(StatusDao.class));
+        return MyStatusApiService.newInstance(URL.URL_LOCAL_TRUST).getRxApi().getStatus().compose(applySchedulerAndErrorHandling(StatusDao.class));
     }
 
 }

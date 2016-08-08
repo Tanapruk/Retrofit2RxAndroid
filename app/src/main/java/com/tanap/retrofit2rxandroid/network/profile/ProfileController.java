@@ -1,5 +1,6 @@
 package com.tanap.retrofit2rxandroid.network.profile;
 
+import com.tanap.retrofit2rxandroid.URL;
 import com.tanap.retrofit2rxandroid.model.ProfileDao;
 import com.tanap.retrofit2rxandroid.model.StatusDao;
 import com.tanap.retrofit2rxandroid.model.StatusProfileDao;
@@ -26,7 +27,7 @@ public class ProfileController extends GenericNetworkController {
     public void getStatusAndProfile() {
 
         Single<StatusDao> statusDao = MyStatusController.getInstance().getMyStatusRx();
-        Single<ProfileDao> profileDao = ProfileApiService.getInstance().getRxApi().getProfile().compose(applySchedulerAndErrorHandling(ProfileDao.class));
+        Single<ProfileDao> profileDao = ProfileApiService.newInstance(URL.URL_LOCAL_TRUST).getRxApi().getProfile().compose(applySchedulerAndErrorHandling(ProfileDao.class));
 
         Single<StatusProfileDao> statusProfileDao = Single.zip(statusDao, profileDao, new Func2<StatusDao, ProfileDao, StatusProfileDao>() {
             @Override

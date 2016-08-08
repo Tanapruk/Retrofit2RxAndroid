@@ -8,14 +8,15 @@ import okhttp3.Request;
  * Created by trusttanapruk on 7/27/2016.
  */
 public class MyStatusApiService extends GenericApiService<StatusApi> {
-    private static MyStatusApiService service;
-    public static MyStatusApiService getInstance() {
-        if (service == null) {
-            service = new MyStatusApiService();
-        }
-        return service;
+
+    private MyStatusApiService() {
     }
 
+    public static MyStatusApiService newInstance(String baseUrl) {
+        MyStatusApiService service = new MyStatusApiService();
+        service.setBaseUrl(baseUrl);
+        return service;
+    }
     @Override
     protected Class<StatusApi> getApiClassType() {
         return StatusApi.class;

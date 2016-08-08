@@ -8,12 +8,13 @@ import okhttp3.Request;
  * Created by trusttanapruk on 7/28/2016.
  */
 public class ProfileApiService extends GenericApiService<ProfileApi> {
-    private static ProfileApiService service;
 
-    public static ProfileApiService getInstance() {
-        if (service == null) {
-            service = new ProfileApiService();
-        }
+    private ProfileApiService() {
+    }
+
+    public static ProfileApiService newInstance(String baseUrl) {
+        ProfileApiService service = new ProfileApiService();
+        service.setBaseUrl(baseUrl);
         return service;
     }
 
